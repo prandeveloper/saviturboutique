@@ -26,6 +26,8 @@ import OrderStatus from '../screens/Drawer/OrderStatus';
 import CartScreen from '../screens/CartScreen';
 import CarouselScreen from '../screens/CarouselScreen';
 import OrderList from '../screens/Drawer/OrderList';
+import QuoteOrderList from '../screens/Drawer/QuoteOrderList';
+import QuoteInvoiceList from '../screens/Drawer/QuoteInvoiceList';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -74,13 +76,30 @@ const HomeStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="OrderStatus"
+        component={OrderStatus}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="OrderList"
         component={OrderList}
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="QuoteOrderList"
+        component={QuoteOrderList}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="GameDetails"
         component={GameDetailsScreen}
+        options={({route}) => ({
+          title: route.params?.title,
+        })}
+      />
+      <Stack.Screen
+        name="QuoteInvoiceList"
+        component={QuoteInvoiceList}
         options={({route}) => ({
           title: route.params?.title,
         })}

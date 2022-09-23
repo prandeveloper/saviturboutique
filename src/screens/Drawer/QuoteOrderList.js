@@ -1,7 +1,7 @@
 //import liraries
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import React, {Component, useEffect, useState} from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,15 +11,20 @@ import {
   ScrollView,
   RefreshControl,
   Image,
+  Alert,
+  Modal,
+  Pressable,
 } from 'react-native';
-import {CheckBox} from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {RadioButton} from 'react-native-paper';
+import { RadioButton } from 'react-native-paper';
+import RazorpayCheckout from 'react-native-razorpay';
+
 
 // create a component
-const OrderList = ({route, navigation}) => {
-  const {order_id} = route.params;
-  // console.log('check order id',order_id);
+const QuoteOrderList = ({ route, navigation }) => {
+  const { order_id } = route.params;
+  //   console.log('check order id',order_id);
 
   const [pickup_r, setPickup_r] = useState(false);
   const [first, setFirst] = useState('');
@@ -48,12 +53,17 @@ const OrderList = ({route, navigation}) => {
   const [status, setStatus] = useState([]);
   const [state, setState] = useState('');
   const [userId, setUserId] = useState('');
+  const [userIds, setUserIds] = useState('');
   const [userOrderId, setUserOrderId] = useState('');
   const [refreshing, setRefreshing] = React.useState(false);
   const [show, setShow] = useState('');
   const [notificationcount, setNotificationcount] = useState([]);
   const [counter, setCounter] = useState('');
   const [succes, unSucces] = useState('');
+  const [PaymentId, setPaymentId] = useState('');
+  
+
+
 
   const getCount = async () => {
     axios
@@ -110,10 +120,10 @@ const OrderList = ({route, navigation}) => {
     setRefreshing(true);
     axios
       .get(
-        `https://saviturboutique.com/newadmin/api/ApiCommonController/ordernewapi/${order_id}`,
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/quoteordernewapi/${order_id}`,
       )
       .then(response => {
-        // console.log("<<<<<Amit",response.data.data)
+        console.log("<<<<<Amit", response.data.data)
         const userOr = response.data.data[0];
         setUserId(userOr);
         // console.log('aaaaaaaa',userOr);
@@ -126,21 +136,12 @@ const OrderList = ({route, navigation}) => {
   const getCart = async () => {
     axios
       .get(
-        `http://saviturboutique.com/newadmin/api/ApiCommonController/justtry/${order_id}`,
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/quoteorderdelivered/${order_id}`,
       )
       .then(response => {
         if (response.data.data && response.data.data.length >= 1) {
           const plants = response.data.data;
           setUserName(plants);
-          const cardDelete = response.data.data[0].id;
-          const pric = response.data.data[0].price;
-          const picName = [];
-          for (var i = 0; i < plants.length; i++) {
-            picName.push(plants[i].product_name);
-          }
-          setPric(pric);
-          setCardDelete(cardDelete);
-          setTitle(picName);
           // console.log("cardid <><M>M>>>", picName);
         } else {
           setUserName([]);
@@ -155,10 +156,10 @@ const OrderList = ({route, navigation}) => {
     setRefreshing(true);
     axios
       .get(
-        `http://saviturboutique.com/newadmin/api/ApiCommonController/totalpriceget/${order_id}`,
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/quotetotalpriceget/${order_id}`,
       )
       .then(response => {
-        // console.log("<<<<<aaaaaaaaaaaaa",response.data)
+        console.log("<<<<<aaaaaaaaaaaaa",response.data.data)
         const invoice = response.data.data;
         setInvoice(invoice);
         console.log('/</</ test invoice', invoice);
@@ -193,6 +194,79 @@ const OrderList = ({route, navigation}) => {
     getInvoice();
     getCartCounter();
   }, [storefav]);
+
+
+  const Order = async id => {
+    console.log("<><?<>?><?><>>",PaymentId,userId.amount,userId);
+    await axios
+      .post(
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/efgh`,
+        {
+          razorpay_payment_id: PaymentId,
+          amount: userId.amount,
+          order_id: userId.order_id,
+        },
+        {
+          headers: {
+            user_id: await AsyncStorage.getItem('user_id'),
+          },
+        },
+      )
+      .then(response => {
+        console.log('////////aaaa', response.data);
+        getCart();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const payment = () => {
+    var options = {
+      description: 'Credits towards consultation',
+      image: 'https://i.imgur.com/3g7nmJC.png',
+      currency: 'INR',
+      key: 'rzp_test_7jsSm3AZI9fhex', // Your api key
+      amount: userId.amount * 100,
+      name: 'foo',
+      prefill: {
+        email: 'void@razorpay.com',
+        contact: '9191919191',
+        name: 'Razorpay Software',
+      },
+      theme: { color: '#F37254' },
+    };
+    RazorpayCheckout.open(options)
+      .then(data => {
+        // handle success
+        alert(`Success: ${data.razorpay_payment_id}`);
+        console.log('%%%%%%', data.razorpay_payment_id);
+        const PaymentId = data.razorpay_payment_id;
+        setPaymentId(PaymentId);
+        if (
+          data.razorpay_payment_id != '' &&
+          data.razorpay_payment_id != null &&
+          data.razorpay_payment_id != undefined
+        ) {
+          Order();
+          navigation.navigate('OrderStatus');
+        }
+
+        console.log(PaymentId);
+      })
+      .catch(error => {
+        console.log(error.error);
+        if (error.error.code === 'BAD_REQUEST_ERROR') {
+          alert('Payment Failed');
+          navigation.navigate('CartScreen');
+        }
+        // handle failure
+        //alert(`Error: ${error.code} | ${error.description}`);
+      });
+  };
+  var modalBackgroundStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  };
   return (
     <View style={styles.container}>
       <View
@@ -205,7 +279,7 @@ const OrderList = ({route, navigation}) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" color={'#F00976'} size={30} />
         </TouchableOpacity>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           {/* <TouchableOpacity>
           <View style={{flexDirection:'row-reverse'}} >
           <TouchableOpacity style={styles.counterbtn} >
@@ -230,10 +304,10 @@ const OrderList = ({route, navigation}) => {
           <RefreshControl refreshing={refreshing} onRefresh={getOrder} />
         }>
         <View>
-          <View style={{padding: 10}}>
+          <View style={{ padding: 10 }}>
             <Text style={styles.hedingtxt}>Your Order status</Text>
             <View>
-              <View style={{marginTop: 10, marginBottom: 10}}>
+              <View style={{ marginTop: 10, marginBottom: 10 }}>
                 <View
                   style={{
                     borderWidth: 1,
@@ -246,7 +320,7 @@ const OrderList = ({route, navigation}) => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={[styles.txt, {marginLeft: 10}]}>
+                    <Text style={[styles.txt, { marginLeft: 10 }]}>
                       Invoice Number {userId.order_id}
                     </Text>
                     <Text style={styles.txt}>
@@ -307,7 +381,7 @@ const OrderList = ({route, navigation}) => {
                         title={'Ready to Dispatch'}
                         checked={userId.status == 4 && true}
                       />
-                      <Text style={{color: 'black'}}>{userId.expire_date}</Text>
+                      <Text style={{ color: 'black' }}>{userId.expire_date}</Text>
                     </View>
                     <CheckBox
                       checkedColor="#15d03e"
@@ -338,8 +412,8 @@ const OrderList = ({route, navigation}) => {
               </View>
             </View>
           </View>
-          <View style={{padding: 10}}>
-            <View style={{marginBottom: 10}}>
+          <View style={{ padding: 10 }}>
+            <View style={{ marginBottom: 10 }}>
               <Text style={styles.heding}>Order Items</Text>
             </View>
             <View>
@@ -347,10 +421,10 @@ const OrderList = ({route, navigation}) => {
                 userName?.map(card => (
                   <View style={styles.box}>
                     <View style={styles.row}>
-                      <View style={[styles.imgView, {width: '40%'}]}>
+                      <View style={[styles.imgView, { width: '40%' }]}>
                         <Image
                           style={styles.img}
-                          source={{uri: `${card.image}`}}
+                          source={{ uri: `${card.image}` }}
                         />
                       </View>
                       <View
@@ -359,14 +433,15 @@ const OrderList = ({route, navigation}) => {
                           width: '60%',
                           marginLeft: 40,
                         }}>
-                        <Text style={styles.txt}>{card.product_name}</Text>
-                        <Text style={styles.txt}>Price : {card.price}</Text>
+                        {/* <Text style={styles.txt}>Name:{card.product_name}</Text> */}
+                        <Text style={styles.txt}>Price : {card.amount}</Text>
+                        <Text style={styles.txt}>Fabric not included</Text>
                         {/* <TouchableOpacity>
                           <Text style={{ color: 'red', fontFamily: 'Roboto-Medium' }} >X Remove</Text>
                         </TouchableOpacity> */}
                       </View>
                     </View>
-                    <View style={{marginTop: 10}}>
+                    <View style={{ marginTop: 10 }}>
                       <View
                         style={{
                           flexDirection: 'row',
@@ -381,7 +456,7 @@ const OrderList = ({route, navigation}) => {
                             borderColor: '#fff',
                           }}
                           title={'I am providing reference outfit'}
-                          checked={card.first == 1 && true}
+                          checked={card.first == 'true' && true}
                         />
                       </View>
                       <View
@@ -398,11 +473,11 @@ const OrderList = ({route, navigation}) => {
                             borderColor: '#fff',
                           }}
                           title={'I want designer to take the measurement'}
-                          checked={card.second == 1 && true}
+                          checked={card.second == 'true' && true}
                         />
                       </View>
                       <View>
-                        <Text style={{color: '#333'}}>
+                        <Text style={{ color: '#333' }}>
                           Instructions to tallor
                         </Text>
                         <View
@@ -412,18 +487,18 @@ const OrderList = ({route, navigation}) => {
                             borderRadius: 8,
                             borderColor: '#D3D3D3',
                           }}>
-                          <Text style={{color: 'black'}}>{card.note}</Text>
+                          <Text style={{ color: 'black' }}>{card.note}</Text>
                         </View>
                       </View>
                     </View>
                   </View>
                 ))
               ) : (
-                <Text style={[styles.heding, {color: 'red'}]}>
+                <Text style={[styles.heding, { color: 'red' }]}>
                   {cartEmptyMessage}
                 </Text>
               )}
-              <View style={{marginTop: 10, marginBottom: 10}}>
+              <View style={{ marginTop: 10, marginBottom: 10 }}>
                 <Text style={styles.heding}>Pick up my Fabric</Text>
                 <View
                   style={{
@@ -517,7 +592,7 @@ const OrderList = ({route, navigation}) => {
                           multiline={true}
                         />
                       </View>
-                      <View style={{marginTop: 10}}>
+                      {/* <View style={{marginTop: 10}}>
                         <View
                           style={{
                             flexDirection: 'row',
@@ -552,12 +627,12 @@ const OrderList = ({route, navigation}) => {
                             checked={userId.second == 1 && true}
                           />
                         </View>
-                      </View>
+                      </View> */}
                     </View>
                   )}
                 </View>
               </View>
-              <View style={{marginTop: 10, marginBottom: 10}}>
+              <View style={{ marginTop: 10, marginBottom: 10 }}>
                 <View
                   style={{
                     borderWidth: 1,
@@ -652,22 +727,22 @@ const OrderList = ({route, navigation}) => {
               </View>
               <View style={styles.disc}>
                 <Text style={styles.pickTxt}>
-                  Approximate delivery date 7 days (2 days pickup + 3 days
+                  Approximate delivery date {userId.expire_date} days (2 days pickup + 3 days
                   process + 2 days delivery by courier )
                 </Text>
               </View>
               <Text style={styles.heding}>invoice</Text>
 
-              <View style={styles.disc}>
+              <View style={styles.disc1}>
                 <View>
-                  <Text style={[styles.pickTxt, {marginBottom: 10}]}>
-                    Product charges:{userId.product_charge}
+                  <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                    Product charges:{userId.amount}
                   </Text>
-                  <Text style={[styles.pickTxt, {marginBottom: 10}]}>
-                    Courier charges:{userId.co_charge}
+                  <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                    Courier charges:49
                   </Text>
-                  <Text style={[styles.pickTxt, {marginBottom: 10}]}>
-                    Total charges:{userId.after_discount}/-
+                  <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                    {/* Total charges:{userId.total_amount}/- */}
                   </Text>
                   {/* <Text style={styles.pickTxt}>Get 10% Discount Pay just Rs 500 only valid till 29-july-2022</Text> */}
                 </View>
@@ -695,6 +770,92 @@ const OrderList = ({route, navigation}) => {
                     </View>
                   )}
                 </View>
+              </View>
+              <View style={styles.centeredView}>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert('Payment failed.');
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <View style={[styles.centeredView, modalBackgroundStyle]}>
+                    <View style={styles.modalView}>
+                      <View style={styles.disc}>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                          Product charges:{userId.amount}
+                        </Text>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                          Unbilled product charges:NA
+                        </Text>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                          Pick up courier charges:Rs 49
+                        </Text>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                          Delivery courier charges:Rs 49
+                        </Text>
+                        {userId ? (
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                              Total charges :{userId.amount}/-
+                        </Text>
+                        )
+                        :
+                        (
+                        <View>
+                          <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                              Total charges : To be calculated
+                        </Text>
+                        </View>
+                        )
+                        }
+                        <Text
+                          style={[
+                            styles.pickTxt,
+                            { marginBottom: 10, fontWeight: '800', textAlign: 'center' },
+                          ]}>
+                          Final charges : Will be updated by {userId.expire_date}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                        }}>
+                        {/* <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => setModalVisible(!modalVisible)}>
+                          <Text style={styles.textStyle}>Cart</Text>
+                        </Pressable> */}
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={payment}>
+                          <Text style={styles.textStyle}>Pay</Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
+                {userId.amount == 0 ?(
+                  <TouchableOpacity style={styles.btn}>
+                  <Text style={{
+                    textAlign: 'center',
+                    fontWeight: '400',
+                    color: '#fff',
+                  }}>Place wait Quote price updated by 24 hours</Text>
+                </TouchableOpacity>
+                )
+                :
+                (
+                  <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(true)} >
+                  <Text style={{
+                    textAlign: 'center',
+                    fontWeight: '700',
+                    fontSize: 16,
+                    color: '#fff',
+                  }}>Continue</Text>
+                </TouchableOpacity>
+                )
+}
               </View>
             </View>
           </View>
@@ -750,11 +911,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 1,
   },
-  pickTxt: {
-    color: '#333',
-    fontFamily: 'Roboto-Medium',
-    alignSelf: 'center',
-  },
   box: {
     borderWidth: 1,
     borderRadius: 10,
@@ -770,6 +926,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Medium',
   },
   disc: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    borderColor: '#15d03e',
+    marginBottom: 10,
+    justifyContent: 'space-around',
+    alignSelf: 'center',
+  },
+  disc1: {
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
@@ -794,7 +959,82 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
   },
+  btn: {
+    backgroundColor: '#F00976',
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 10,
+    elevation: 2,
+    width: '95%',
+    alignSelf: 'center'
+  },
+  button: {
+    borderRadius: 10,
+    padding: 15,
+    elevation: 2,
+    width: 100,
+    marginHorizontal: 15,
+  },
+  centeredView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '90%',
+  },
+  buttonOpen: {
+    backgroundColor: '#F00976',
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 10,
+    elevation: 2,
+    width: '95%',
+  },
+  buttonClose: {
+    backgroundColor: '#F00976',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  countertxt: {
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  counterbtn: {
+    backgroundColor: 'yellow',
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  pickTxt: {
+    color: '#333',
+    fontFamily: 'Roboto-Medium',
+    alignSelf: 'center',
+  },
 });
 
 //make this component available to the app
-export default OrderList;
+export default QuoteOrderList;

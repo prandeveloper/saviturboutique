@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,13 +14,13 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import {CheckBox} from 'react-native-elements';
-import {RadioButton} from 'react-native-paper';
+import { CheckBox } from 'react-native-elements';
+import { RadioButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './HomeScreen';
 import RazorpayCheckout from 'react-native-razorpay';
 
-const CartScreen = ({navigation}) => {
+const CartScreen = ({ navigation }) => {
   const [pickup_r, setPickup_r] = useState(false);
   const [first, setFirst] = useState('');
   const [second, setSecond] = useState('');
@@ -52,11 +52,14 @@ const CartScreen = ({navigation}) => {
   const [userId, setUserId] = useState('');
   const [PaymentId, setPaymentId] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [quotemodalVisible, setquotemodalVisible] = useState(false);
   const [notificationcount, setNotificationcount] = useState([]);
   const [fourth, setFourth] = useState('');
   const [third, setThird] = useState('');
   const [notes, setNotes] = useState('');
   const [quote, setQuote] = useState([]);
+  const [productId, setProductId] = useState('');
+  const [sendQuoteProduction, setSendQuoteProduction] = useState('');
 
   const getCount = async () => {
     axios
@@ -95,6 +98,7 @@ const CartScreen = ({navigation}) => {
           price: price,
           product_name: JSON.stringify(title),
           product_name1: singalName,
+          note: JSON.stringify(notes)
         },
         {
           headers: {
@@ -115,6 +119,61 @@ const CartScreen = ({navigation}) => {
         console.log(error);
       });
   };
+  const AddQuote = async () => {
+    console.log("chack quote//////", pickup_r, address, pincode, pickup_date, delivery_address, delivery_pincode, delivery_r, delivery_same, productId);
+    axios
+      .post(
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/quotedeliver`,
+        {
+          pickup_r: pickup_r,
+          address: address,
+          pincode: pincode,
+          pickup_date: pickup_date,
+          delivery_address: delivery_address,
+          delivery_pincode: delivery_pincode,
+          delivery_r: delivery_r,
+          delivery_same: delivery_same,
+          product_id: productId
+        },
+        {
+          headers: {
+            user_id: await AsyncStorage.getItem('user_id'),
+          },
+        },
+      )
+      .then(response => {
+        console.log('aaaaaaa', response.data);
+        getInvoice();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+
+  const placeOrder = () => {
+    if (userName.length >= 1 && quote.length >= 1) {
+
+      AddCart()
+      AddQuote()
+    }
+    else {
+
+      if (!userName.length >= 1) {
+        if (quote.length >= 1) {
+          AddQuote()
+          navigation.navigate('OrderStatus');
+        } else {
+          navigation.navigate('CartScreen');
+
+        }
+        // navigation.navigate('TabNavigator',{ screen: 'OrderStatus' })
+      }
+      AddCart()
+    }
+  }
+
+
 
   const getData = async () => {
     try {
@@ -142,14 +201,19 @@ const CartScreen = ({navigation}) => {
           for (var i = 0; i < plants.length; i++) {
             picName.push(plants[i].product_name);
           }
+          const note = [];
+          for (var i = 0; i < plants.length; i++) {
+            note.push(plants[i].note);
+          }
           setPric(pric);
           setCardDelete(cardDelete);
           setTitle(picName);
-          console.log('cardid <><M>M>>>', picName);
+          // console.log('cardid <><M>M>>>', picName);
           const singalName = plants[0].product_name;
           setSingalName(singalName);
           console.log(',,,,,,,,,,', singalName);
-          setNotes(response.data.data[0].note);
+          setNotes(note);
+          
         } else {
           setUserName([]);
           setCartEmptyMessage('No Items in cart');
@@ -164,6 +228,7 @@ const CartScreen = ({navigation}) => {
     getCart();
   }, [storedata]);
   const getQuoteCart = async () => {
+    setRefreshing(true);
     axios
       .get(
         `http://saviturboutique.com/newadmin/api/ApiCommonController/quotegettt/${storedata}`,
@@ -172,10 +237,15 @@ const CartScreen = ({navigation}) => {
         if (response.data.data && response.data.data.length >= 1) {
           const quotes = response.data.data;
           setQuote(quotes);
+          const quoteProduct = quotes[0].id
+          setProductId(quoteProduct)
+
         } else {
           setQuote([]);
           setCartEmptyMessages('No Items in quotes cart');
         }
+        setRefreshing(false);
+
       })
       .catch(error => {
         console.log(error);
@@ -307,7 +377,7 @@ const CartScreen = ({navigation}) => {
         contact: '9191919191',
         name: 'Razorpay Software',
       },
-      theme: {color: '#F37254'},
+      theme: { color: '#F37254' },
     };
     RazorpayCheckout.open(options)
       .then(data => {
@@ -353,7 +423,7 @@ const CartScreen = ({navigation}) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" color={'#F00976'} size={30} />
         </TouchableOpacity>
-        <View style={{flexDirection: 'row-reverse'}}>
+        <View style={{ flexDirection: 'row-reverse' }}>
           <TouchableOpacity style={styles.counterbtn}>
             <Text style={styles.countertxt}>{notificationcount.data}</Text>
           </TouchableOpacity>
@@ -361,12 +431,12 @@ const CartScreen = ({navigation}) => {
         </View>
       </View>
       <ScrollView
-        style={{padding: 5}}
+        style={{ padding: 5 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={getCart} />
         }>
-        <View style={{padding: 10}}>
-          <View style={{marginBottom: 10}}>
+        <View style={{ padding: 10 }}>
+          <View style={{ marginBottom: 10 }}>
             <Text style={styles.heding}>Order Items</Text>
           </View>
           <View>
@@ -374,20 +444,20 @@ const CartScreen = ({navigation}) => {
               userName?.map(card => (
                 <View style={styles.box}>
                   <View style={styles.row}>
-                    <View style={[styles.imgView, {width: '40%'}]}>
+                    <View style={[styles.imgView, { width: '40%' }]}>
                       <Image
                         style={styles.img}
-                        source={{uri: `${card.image}`}}
+                        source={{ uri: `${card.image}` }}
                       />
                     </View>
                     <View
                       style={{
                         width: '40%',
                       }}>
-                      <Text style={[styles.txt, {marginBottom: 10}]}>
+                      <Text style={[styles.txt, { marginBottom: 10 }]}>
                         {card.product_name}
                       </Text>
-                      <Text style={[styles.txt, {marginBottom: 10}]}>
+                      <Text style={[styles.txt, { marginBottom: 10 }]}>
                         Price : {card.price}
                       </Text>
                       <Text style={styles.txt}>Fabric is not included</Text>
@@ -397,14 +467,14 @@ const CartScreen = ({navigation}) => {
                         width: '20%',
                       }}>
                       <TouchableOpacity
-                        style={{alignSelf: 'flex-end'}}
+                        style={{ alignSelf: 'flex-end' }}
                         onPress={() => onRemoveItem(card.id)}>
                         <Ionicons name="close" color={'red'} size={25} />
                       </TouchableOpacity>
                     </View>
                   </View>
 
-                  <View style={{marginTop: 10}}>
+                  <View style={{ marginTop: 10 }}>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -444,7 +514,7 @@ const CartScreen = ({navigation}) => {
                       />
                     </View>
                     <View>
-                      <Text style={{color: '#333'}}>
+                      <Text style={{ color: '#333' }}>
                         Instructions to tallor
                       </Text>
                       <View
@@ -454,14 +524,14 @@ const CartScreen = ({navigation}) => {
                           borderRadius: 8,
                           borderColor: '#D3D3D3',
                         }}>
-                        <Text style={{color: 'black'}}>{card.note}</Text>
+                        <Text style={{ color: 'black' }}>{card.note}</Text>
                       </View>
                     </View>
                   </View>
                 </View>
               ))
             ) : (
-              <Text style={[styles.heding, {color: 'red'}]}>
+              <Text style={[styles.heding, { color: 'red' }]}>
                 {cartEmptyMessage}
               </Text>
             )}
@@ -469,17 +539,17 @@ const CartScreen = ({navigation}) => {
               quote?.map(quotes => (
                 <View style={styles.box}>
                   <View style={styles.row}>
-                    <View style={[styles.imgView, {width: '40%'}]}>
+                    <View style={[styles.imgView, { width: '40%' }]}>
                       <Image
                         style={styles.img}
-                        source={{uri: `${quotes.image}`}}
+                        source={{ uri: `${quotes.image}` }}
                       />
                     </View>
                     <View
                       style={{
                         width: '40%',
                       }}>
-                      <Text style={[styles.txt, {marginBottom: 10}]}>
+                      <Text style={[styles.txt, { marginBottom: 10 }]}>
                         Price : Quote Pending Expected with in 24 Hours
                       </Text>
                       <Text style={styles.txt}>Fabric is not included</Text>
@@ -489,14 +559,14 @@ const CartScreen = ({navigation}) => {
                         width: '20%',
                       }}>
                       <TouchableOpacity
-                        style={{alignSelf: 'flex-end'}}
+                        style={{ alignSelf: 'flex-end' }}
                         onPress={() => onRemoveQuote(quotes.id)}>
                         <Ionicons name="close" color={'red'} size={25} />
                       </TouchableOpacity>
                     </View>
                   </View>
 
-                  <View style={{marginTop: 10}}>
+                  <View style={{ marginTop: 10 }}>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -536,7 +606,7 @@ const CartScreen = ({navigation}) => {
                       />
                     </View>
                     <View>
-                      <Text style={{color: '#333'}}>
+                      <Text style={{ color: '#333' }}>
                         Instructions to tallor
                       </Text>
                       <View
@@ -546,18 +616,18 @@ const CartScreen = ({navigation}) => {
                           borderRadius: 8,
                           borderColor: '#D3D3D3',
                         }}>
-                        <Text style={{color: 'black'}}>{quotes.note}</Text>
+                        <Text style={{ color: 'black' }}>{quotes.note}</Text>
                       </View>
                     </View>
                   </View>
                 </View>
               ))
             ) : (
-              <Text style={[styles.heding, {color: 'red'}]}>
+              <Text style={[styles.heding, { color: 'red' }]}>
                 {cartEmptyMessages}
               </Text>
             )}
-            <View style={{marginTop: 10, marginBottom: 10}}>
+            <View style={{ marginTop: 10, marginBottom: 10 }}>
               <Text style={styles.heding}>Pick up my Fabric</Text>
               <View
                 style={{
@@ -696,7 +766,7 @@ const CartScreen = ({navigation}) => {
                 )}
               </View>
             </View>
-            <View style={{marginTop: 10, marginBottom: 10}}>
+            <View style={{ marginTop: 10, marginBottom: 10 }}>
               <View
                 style={{
                   borderWidth: 1,
@@ -813,28 +883,28 @@ const CartScreen = ({navigation}) => {
                   <View style={[styles.centeredView, modalBackgroundStyle]}>
                     <View style={styles.modalView}>
                       <View style={styles.disc}>
-                        <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Product charges:{invoice.product_charge}
                         </Text>
-                        <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Unbilled product charges:NA
                         </Text>
-                        <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Pick up courier charges:Rs{invoice.re_charge}
                         </Text>
-                        <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs{invoice.co_charge}
                         </Text>
-                        <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Total charges:{invoice.total_amount}/-
                         </Text>
-                        <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Discount Applied:Rs.{invoice.discount}
                         </Text>
                         <Text
                           style={[
                             styles.pickTxt,
-                            {marginBottom: 10, fontWeight: '800'},
+                            { marginBottom: 10, fontWeight: '800' },
                           ]}>
                           Final charges after discount:Rs.
                           {invoice.after_discount} only
@@ -845,7 +915,7 @@ const CartScreen = ({navigation}) => {
                             borderRadius: 10,
                             borderColor: '#F00976',
                           }}>
-                          <View style={{padding: 5}}>
+                          <View style={{ padding: 5 }}>
                             <Text style={[styles.pickTxt]}>
                               Applied 10% DISCOUNT
                             </Text>
@@ -857,12 +927,15 @@ const CartScreen = ({navigation}) => {
                             </Text>
                           </View>
                         </View>
-                        <Text style={[styles.pickTxt, {textAlign: 'center'}]}>
+                        <Text style={[styles.pickTxt, { textAlign: 'center' }]}>
                           Best chance to be delivered by{' '}
-                          <Text style={{fontSize: 18}}>
+                          <Text style={{ fontSize: 18 }}>
                             {invoice.expire_date}
                           </Text>{' '}
                           before {invoice.expire_time}
+                        </Text>
+                        <Text style={[styles.pickTxt, { textAlign: 'center' }]}>
+                          Quote product will be available for purchase after price update
                         </Text>
                       </View>
                       <View
@@ -884,9 +957,12 @@ const CartScreen = ({navigation}) => {
                   </View>
                 </Modal>
 
+
+
+
                 <TouchableOpacity
                   style={[styles.button, styles.buttonOpen]}
-                  onPress={AddCart}>
+                  onPress={placeOrder}>
                   <Text
                     style={{
                       textAlign: 'center',

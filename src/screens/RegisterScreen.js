@@ -216,7 +216,7 @@ const RegisterScreen = ({navigation}) => {
               marginBottom: 10,
             }}>
             <Text style={{color: '#333', fontWeight: '500'}}>
-              To see our latest plants
+              To see our latest Design
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text style={{color: '#198ecf', fontWeight: '700'}}> Login</Text>
@@ -324,7 +324,7 @@ const RegisterScreen = ({navigation}) => {
               marginBottom: 10,
             }}>
             <Text style={{color: '#333', fontWeight: '500'}}>
-              To see our latest plants
+              To see our latest Design
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text style={{color: '#198ecf', fontWeight: '700'}}> Login</Text>

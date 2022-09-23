@@ -16,7 +16,7 @@ import {CheckBox} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // create a component
-const OrderStatus = ({navigation}) => {
+const QuoteInvoiceList = ({navigation}) => {
   const [pickup_r, setPickup_r] = useState(false);
   const [first, setFirst] = useState('');
   const [second, setSecond] = useState('');
@@ -185,7 +185,7 @@ const OrderStatus = ({navigation}) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={getOrder} />
         }>
-        {status?.map(items => (
+        {/* {status?.map(items => (
           <TouchableOpacity
             style={{marginTop: 10, marginBottom: 10}}
             onPress={() =>
@@ -208,8 +208,8 @@ const OrderStatus = ({navigation}) => {
             </View>
           </TouchableOpacity>
           
-        ))}
-        {/* {quoteStatus?.map(items => (
+        ))} */}
+        {quoteStatus?.map(items => (
           <TouchableOpacity
             style={{marginTop: 10, marginBottom: 10}}
             onPress={() =>
@@ -232,7 +232,7 @@ const OrderStatus = ({navigation}) => {
             </View>
           </TouchableOpacity>
           
-        ))} */}
+        ))}
 
         {/* <View>
         <View style={{ padding: 10 }}>
@@ -546,4 +546,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default OrderStatus;
+export default QuoteInvoiceList;

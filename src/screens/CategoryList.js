@@ -190,7 +190,7 @@ const CategoryList = ({route, navigation}) => {
             overlayBackgroundColor="#333"
             resizeMode="contain"
             source={{uri: `${item.image}`}}
-            style={[styles.exerciseImage, {borderWidth: 1, borderRadius: 10}]}>
+            style={[styles.exerciseImage, { borderRadius: 10}]}>
             <View style={{flex: 1, borderRadius: 10}}>
               <View style={{flex: 1, alignSelf: 'flex-end'}}>
                 <TouchableOpacity

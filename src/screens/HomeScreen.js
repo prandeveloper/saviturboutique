@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   imageview: {
-    borderWidth: 2,
+    // borderWidth: 2,
     borderColor: 'red',
     borderRadius: 10,
   },

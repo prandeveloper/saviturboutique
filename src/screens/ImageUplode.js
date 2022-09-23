@@ -101,13 +101,12 @@ const ImageUplode = ({navigation}) => {
   };
 
   const editData = async () => {
-    console.log(first, second, note, image);
-    var img = {uri: `${image}`, name: 'profile.jpg', type: 'image/jpeg'};
+    console.log("@@@@@@@@@",first, second, note, image);
+    var img = {uri: `${image}`, name: 'imageUplode.jpg', type: 'image/jpeg'};
     const formData = new FormData();
     formData.append('first', first);
     formData.append('second', second);
     formData.append('note', note);
-    formData.append('category_id', nameId);
     formData.append('image', img);
     fetch(`http://saviturboutique.com/newadmin/api/ApiCommonController/quote`, {
       method: 'POST',
@@ -119,7 +118,7 @@ const ImageUplode = ({navigation}) => {
     })
       .then(response => {
         response.json().then(res => {
-          console.log('<><><><><><', res);
+          console.log(res);
           if (res != null) {
             navigation.replace('CartScreen');
           } else {
@@ -142,6 +141,7 @@ const ImageUplode = ({navigation}) => {
         setLanguage(language);
         const nameId = response.data.data[0].id;
         setNameId(nameId);
+        console.log("aaiaiaiaiaiai",nameId);
       })
       .catch(error => {
         console.log(error);
@@ -318,9 +318,9 @@ const ImageUplode = ({navigation}) => {
                         alignItems: 'center',
                       }}>
                       <ImageBackground
-                        source={{
-                          uri: userImage,
-                        }}
+                        // source={{
+                        //   uri: userImage,
+                        // }}
                         style={{height: 120, width: 130, padding: 10}}
                         imageStyle={{borderRadius: 15}}>
                         <View
@@ -353,7 +353,7 @@ const ImageUplode = ({navigation}) => {
                     </View>
                   </TouchableOpacity>
                 </View>
-                <View
+                {/* <View
                   style={{
                     justifyContent: 'space-around',
                     width: '60%',
@@ -366,12 +366,12 @@ const ImageUplode = ({navigation}) => {
                     {language?.map(lam => (
                       <Picker.Item
                         label={lam.category_name}
-                        value={lam.category_name}
+                        value={lam.id}
                         style={{color: 'black', backgroundColor: '#fff'}}
                       />
                     ))}
                   </Picker>
-                </View>
+                </View> */}
               </View>
               <View style={{marginTop: 10}}>
                 <View

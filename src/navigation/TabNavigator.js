@@ -17,6 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import OrderStatus from '../screens/Drawer/OrderStatus';
 import ImageUplode from '../screens/ImageUplode';
+import TabOrderStatus from '../screens/Drawer/TabOrderStatus';
 
 const Tab = createBottomTabNavigator();
 
@@ -62,6 +63,17 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
+        name="TabOrderStatus"
+        component={TabOrderStatus}
+        options={{
+          // tabBarBadge: 3,
+          tabBarBadgeStyle: {backgroundColor: 'yellow'},
+          tabBarIcon: ({color, size}) => (
+            <Feather name="shopping-bag" color={color} size={size} />
+          ),
+        }}
+      />
+      {/* <Tab.Screen
         name="OrderStatus"
         component={OrderStatus}
         options={{
@@ -71,7 +83,7 @@ const TabNavigator = () => {
             <Feather name="shopping-bag" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

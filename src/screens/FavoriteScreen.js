@@ -186,7 +186,7 @@ const FavoriteScreen = ({navigation}) => {
                       source={{uri: `${element.item.image}`}}
                       style={[
                         styles.exerciseImage,
-                        {borderWidth: 1, borderRadius: 10},
+                        { borderRadius: 10},
                       ]}>
                       <View style={{flex: 1, borderRadius: 10}}>
                         <View style={{flex: 1, alignSelf: 'flex-end'}}>
@@ -453,6 +453,9 @@ const FavoriteScreen = ({navigation}) => {
                     <Text style={styles.pricetxt}>
                       Price:Rs{element.item.price}
                     </Text>
+                    <Text style={styles.pricetxt1}>
+                      {element.item.product_name}
+                    </Text>
                   </View>
                 </View>
               );
@@ -486,6 +489,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 16,
     marginTop: 5,
+    marginBottom: 5,
+  },
+  pricetxt1: {
+    color: '#333',
+    alignSelf: 'center',
+    fontSize: 16,
     marginBottom: 5,
   },
   view: {
