@@ -227,7 +227,7 @@ const ImageUplode = ({navigation}) => {
             marginBottom: 5,
             padding: 5,
           }}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" color={'#F00976'} size={30} />
           </TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
@@ -415,7 +415,7 @@ const ImageUplode = ({navigation}) => {
                   />
                 </View>
                 <View>
-                  <Text style={{color: '#333'}}>Instructions to tallor</Text>
+                  <Text style={{color: '#333'}}>Instructions to tailor</Text>
                   <View style={{}}>
                     <TextInput
                       value={note}

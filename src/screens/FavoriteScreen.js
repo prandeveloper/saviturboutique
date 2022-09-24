@@ -448,12 +448,13 @@ const FavoriteScreen = ({navigation}) => {
                         </View>
                       </View>
                     </ImageModal>
-                    <Text style={styles.pricetxt}>
-                      Price:Rs{element.item.price}
-                    </Text>
                     <Text style={styles.pricetxt1}>
                       {element.item.product_name}
                     </Text>
+                    <Text style={styles.pricetxt}>
+                      Price:Rs{element.item.price}
+                    </Text>
+                    
                   </View>
                 </View>
               );

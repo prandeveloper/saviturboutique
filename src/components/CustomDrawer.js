@@ -85,9 +85,9 @@ const CustomDrawer = props => {
     <View style={{flex: 1}}>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{backgroundColor: '#8200d6'}}>
+        contentContainerStyle={{backgroundColor: '#fff'}}>
         <ImageBackground
-          source={require('../assets/images/menu-bg.jpeg')}
+          // source={require('../assets/images/menu-bg.jpeg')}
           style={{padding: 20}}>
           <ScrollView
             refreshControl={
@@ -106,7 +106,7 @@ const CustomDrawer = props => {
                 />
                 <Text
                   style={{
-                    color: '#fff',
+                    color: '#333',
                     fontSize: 18,
                     fontFamily: 'Roboto-Medium',
                     marginBottom: 5,
@@ -172,7 +172,7 @@ const CustomDrawer = props => {
                 marginLeft: 20,
               }}>
               <Ionicons
-                name="information-circle-outline"
+                name="document-text-outline"
                 size={22}
                 color={'black'}
               />
@@ -202,7 +202,7 @@ const CustomDrawer = props => {
                 marginLeft: 20,
               }}>
               <Ionicons
-                name="information-circle-outline"
+                name="document-text-outline"
                 size={22}
                 color={'black'}
               />
@@ -232,7 +232,7 @@ const CustomDrawer = props => {
                 marginLeft: 20,
               }}>
               <Ionicons
-                name="information-circle-outline"
+                name="document-text-outline"
                 size={22}
                 color={'black'}
               />
@@ -262,7 +262,7 @@ const CustomDrawer = props => {
                 marginLeft: 20,
               }}>
               <Ionicons
-                name="information-circle-outline"
+                name="document-text-outline"
                 size={22}
                 color={'black'}
               />

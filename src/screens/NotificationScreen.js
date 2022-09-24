@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   rowFrontVisible: {
     backgroundColor: '#FFF',
     borderRadius: 5,
-    height: 70,
+    height: 75,
     padding: 10,
     marginBottom: 15,
     borderWidth: 2,
@@ -337,7 +337,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 5,
     color: '#666',
   },
   message: {

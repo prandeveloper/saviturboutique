@@ -424,10 +424,13 @@ const CartScreen = ({ navigation }) => {
           <Ionicons name="arrow-back" color={'#F00976'} size={30} />
         </TouchableOpacity>
         <View style={{ flexDirection: 'row-reverse' }}>
-          <TouchableOpacity style={styles.counterbtn}>
+          <TouchableOpacity style={styles.counterbtn} >
             <Text style={styles.countertxt}>{notificationcount.data}</Text>
-          </TouchableOpacity>
-          <Ionicons name="notifications" color={'#F00976'} size={30} />
+          </TouchableOpacity >
+          <TouchableOpacity
+              onPress={() => navigation.navigate('NotificationScreen')}>
+              <Ionicons name="notifications" color={'#F00976'} size={30} />
+            </TouchableOpacity>
         </View>
       </View>
       <ScrollView
@@ -470,6 +473,7 @@ const CartScreen = ({ navigation }) => {
                         style={{ alignSelf: 'flex-end' }}
                         onPress={() => onRemoveItem(card.id)}>
                         <Ionicons name="close" color={'red'} size={25} />
+                      <Text style={{fontSize:8,color:'red'}}>Remove</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -515,7 +519,7 @@ const CartScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={{ color: '#333' }}>
-                        Instructions to tallor
+                        Instructions to tailor
                       </Text>
                       <View
                         style={{
@@ -562,6 +566,8 @@ const CartScreen = ({ navigation }) => {
                         style={{ alignSelf: 'flex-end' }}
                         onPress={() => onRemoveQuote(quotes.id)}>
                         <Ionicons name="close" color={'red'} size={25} />
+                      <Text style={{fontSize:8,color:'red'}}>Remove</Text>
+
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -607,7 +613,7 @@ const CartScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={{ color: '#333' }}>
-                        Instructions to tallor
+                        Instructions to tailor
                       </Text>
                       <View
                         style={{
@@ -857,10 +863,10 @@ const CartScreen = ({ navigation }) => {
                 </View>
               </View>
             </View>
+            <Text style={{fontSize:20,fontWeight:'700',color:'black',marginBottom:10}}>Delivery Date</Text>
             <View style={styles.disc}>
               <Text style={styles.pickTxt}>
-                Approximate delivery date {invoice.expire_date} days (2 days
-                pickup + 3 days process + 2 days delivery by courier )
+                If you order with in 11 Hr:29 minutes, best change to delivered by{invoice.expire_date} before 7:00
               </Text>
             </View>
             <View>
@@ -904,7 +910,7 @@ const CartScreen = ({ navigation }) => {
                         <Text
                           style={[
                             styles.pickTxt,
-                            { marginBottom: 10, fontWeight: '800' },
+                            { marginBottom: 10, fontWeight: '600',textAlign:'center' },
                           ]}>
                           Final charges after discount:Rs.
                           {invoice.after_discount} only
@@ -942,11 +948,11 @@ const CartScreen = ({ navigation }) => {
                         style={{
                           flexDirection: 'row',
                         }}>
-                        <Pressable
+                        {/* <Pressable
                           style={[styles.button, styles.buttonClose]}
                           onPress={() => setModalVisible(!modalVisible)}>
                           <Text style={styles.textStyle}>Cart</Text>
-                        </Pressable>
+                        </Pressable> */}
                         <Pressable
                           style={[styles.button, styles.buttonClose]}
                           onPress={payment}>
@@ -997,7 +1003,7 @@ const styles = StyleSheet.create({
   img: {
     width: 100,
     height: 100,
-    borderWidth: 2,
+    // borderWidth: 2,
     borderRadius: 12,
     borderColor: 'red',
   },
