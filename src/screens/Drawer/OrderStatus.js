@@ -146,7 +146,7 @@ const OrderStatus = ({navigation}) => {
   }, [storefav]);
   return (
     <View style={styles.container}>
-      {/* <View
+      <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -180,7 +180,7 @@ const OrderStatus = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-      </View> */}
+      </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={getOrder} />
@@ -209,7 +209,7 @@ const OrderStatus = ({navigation}) => {
           </TouchableOpacity>
           
         ))}
-        {/* {quoteStatus?.map(items => (
+        {quoteStatus?.map(items => (
           <TouchableOpacity
             style={{marginTop: 10, marginBottom: 10}}
             onPress={() =>
@@ -232,7 +232,7 @@ const OrderStatus = ({navigation}) => {
             </View>
           </TouchableOpacity>
           
-        ))} */}
+        ))}
 
         {/* <View>
         <View style={{ padding: 10 }}>

@@ -37,6 +37,28 @@ const LoginScreen = ({navigation}) => {
   const [otp, setOtp] = useState(true);
   const [code, setCode] = useState('');
   const [storeddata, setStoreddata] = useState('');
+  const [OtpRecived, setOtpRecived] = useState('');
+  const [userName, setUserName] = useState('');
+
+
+  const getUserName = async () => {
+    axios
+      .get(
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/usersingledata/${storeddata}`,
+      )
+      .then(response => {
+        //console.log("<<<<<",response.data.data)
+        const plants = response.data.data[0].username;
+        setUserName(plants);
+        console.log('name ????', plants);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getUserName();
+  }, [storeddata]);
 
   const sendMobile = () => {
     setOtp(false);
@@ -50,7 +72,9 @@ const LoginScreen = ({navigation}) => {
         },
       )
       .then(response => {
-        console.log(response.data);
+        // console.log("log in#####",response.data.data.otp);
+        const resive =  response.data.data.otp
+        setOtpRecived(resive)
       })
       .catch(error => {
         console.log(error);
@@ -156,11 +180,15 @@ const LoginScreen = ({navigation}) => {
               <Text style={styles.txtName}>Name</Text>
             </View>
             <View style={{width: '60%'}}>
-              <TextInput
+              {/* <TextInput
                 value={username}
                 onChangeText={setUsername}
                 style={styles.inpu}
-              />
+              /> */}
+              <TouchableOpacity style={styles.inpu}>
+            <Text style={styles.heding1}>{userName}</Text>
+              </TouchableOpacity>
+
             </View>
           </View>
           <View style={styles.mainView}>
@@ -205,7 +233,27 @@ const LoginScreen = ({navigation}) => {
                     console.log(`Code is ${code}, you are good to go!`);
                   }}
                 />
-                <TouchableOpacity
+        {OtpRecived?(<TouchableOpacity
+                  style={{
+                    backgroundColor: '#F00976',
+                    padding: 8,
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    marginHorizontal: 10,
+                  }}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontWeight: '700',
+                      fontSize: 16,
+                      color: '#fff',
+                    }}>
+                    Wait Otp
+                  </Text>
+                </TouchableOpacity>
+                ):(
+                  <TouchableOpacity
                   onPress={sendMobile}
                   style={{
                     backgroundColor: '#F00976',
@@ -225,6 +273,9 @@ const LoginScreen = ({navigation}) => {
                     Get Otp
                   </Text>
                 </TouchableOpacity>
+                )}
+
+                
               </View>
             </View>
           </View>
@@ -352,5 +403,8 @@ const styles = StyleSheet.create({
   underlineStyleHighLighted: {
     color: '#F00976',
   },
+  heding1:{
+    color:'black'
+  }
 });
 export default LoginScreen;

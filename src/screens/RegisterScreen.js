@@ -37,20 +37,24 @@ const RegisterScreen = ({navigation}) => {
   const [otp, setOtp] = useState(true);
   const [code, setCode] = useState('');
   const [storeddata, setStoreddata] = useState('');
+  const [OtpRecived, setOtpRecived] = useState('');
+
 
   const sendMobile = () => {
     setOtp(false);
-    console.log(username, mobile_no);
+    console.log("number kya ??????",username, mobile_no);
     axios
       .post(
-        `https://saviturboutique.com/newadmin/api/ApiCommonController/registration`,
+        ` https://saviturboutique.com/newadmin/api/ApiCommonController/registration`,
         {
           username: username,
           mobile_no: mobile_no,
         },
       )
       .then(response => {
-        console.log(response.data);
+        console.log("#####Register",response.data);
+        const resive =  response.data.data.otp
+        setOtpRecived(resive)
       })
       .catch(error => {
         console.log(error);
@@ -70,7 +74,7 @@ const RegisterScreen = ({navigation}) => {
       const user_id = await AsyncStorage.getItem('user_id');
       if (user_id !== null) {
         console.log('success');
-        console.log(user_id);
+        console.log('user_id ???????', user_id);
         setStoreddata(user_id);
         navigation.replace('Home');
       }
@@ -85,7 +89,7 @@ const RegisterScreen = ({navigation}) => {
     console.log(mobile_no, code);
     axios
       .post(
-        `https://saviturboutique.com/newadmin/api/ApiCommonController/verify_otppp`,
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/newverify_otppp`,
         {
           mobile_no: mobile_no,
           otp: code,
@@ -108,172 +112,94 @@ const RegisterScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
-      {otp === true ? (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{paddingHorizontal: 10}}>
-          <Text
-            style={{
-              fontFamily: 'Roboto-MediumItalic',
-              fontSize: 28,
-              fontWeight: '500',
-              color: '#333',
-              marginBottom: 30,
-              alignSelf: 'center',
-            }}>
-            Be Stylish Always
-          </Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{paddingHorizontal: 10}}>
+        <Text
+          style={{
+            fontFamily: 'Roboto-MediumItalic',
+            fontSize: 28,
+            fontWeight: '500',
+            color: '#333',
+            marginBottom: 30,
+            alignSelf: 'center',
+          }}>
+          Be Stylish Always
+        </Text>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 30,
-              width: '100%',
-            }}>
-            <View style={styles.txtView}>
-              <Text style={styles.txt}>Save Time</Text>
-              <Text style={styles.txt}>
-                Perfectly fitting Custom designer wear online
-              </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 30,
+            width: '100%',
+          }}>
+          <View style={styles.txtView}>
+            <Text style={styles.txt}>Save Time</Text>
+            <Text style={styles.txt}>
+              Perfectly fitting Custom designer wear online
+            </Text>
+          </View>
+          <View style={styles.imgView}>
+            <Image
+              style={styles.img}
+              source={require('../assets/images/registration.png')}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            width: '100%',
+            borderWidth: 2,
+            marginBottom: 20,
+            borderRadius: 10,
+            borderColor: '#F00976',
+          }}>
+          <View style={styles.mainView}>
+            <View style={{width: '40%'}}>
+              <Text style={styles.txtName}>Name</Text>
             </View>
-            <View style={styles.imgView}>
-              <Image
-                style={styles.img}
-                source={require('../assets/images/registration.png')}
+            <View style={{width: '60%'}}>
+              <TextInput
+                value={username}
+                onChangeText={setUsername}
+                style={styles.inpu}
+              />
+            </View>
+          </View>
+          <View style={styles.mainView}>
+            <View style={{width: '40%'}}>
+              <Text style={styles.txtName}>Phone Number</Text>
+            </View>
+            <View style={{width: '60%'}}>
+              <TextInput
+                value={mobile_no}
+                onChangeText={setMobile_no}
+                keyboardType="number-pad"
+                style={styles.inpu}
               />
             </View>
           </View>
           <View
             style={{
               width: '100%',
-              borderWidth: 2,
               marginBottom: 20,
               borderRadius: 10,
-              borderColor: '#D3D3D3',
+              borderColor: '#F00976',
             }}>
             <View style={styles.mainView}>
-              <View style={{width: '40%'}}>
-                <Text style={styles.txtName}>Name</Text>
+              <View style={{width: '20%'}}>
+                <Text style={styles.txtName}>OTP</Text>
               </View>
-              <View style={{width: '60%'}}>
-                <TextInput
-                  value={username}
-                  onChangeText={setUsername}
-                  style={styles.inpu}
-                />
-              </View>
-            </View>
-            <View style={styles.mainView}>
-              <View style={{width: '40%'}}>
-                <Text style={styles.txtName}>Phone Number</Text>
-              </View>
-              <View style={{width: '60%'}}>
-                <TextInput
-                  value={mobile_no}
-                  onChangeText={setMobile_no}
-                  keyboardType="number-pad"
-                  style={styles.inpu}
-                />
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity
-            onPress={sendMobile}
-            style={{
-              backgroundColor: '#198ecf',
-              padding: 20,
-              borderRadius: 10,
-              marginBottom: 10,
-              width: 200,
-              alignSelf: 'center',
-            }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontWeight: '700',
-                fontSize: 16,
-                color: '#fff',
-              }}>
-              Send Otp
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              justifyContent: 'center',
-              marginBottom: 10,
-              alignSelf: 'center',
-            }}>
-            <Text style={{color: '#333', fontWeight: '500'}}>
-              Registration is Free
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginBottom: 10,
-            }}>
-            <Text style={{color: '#333', fontWeight: '500'}}>
-              To see our latest Design
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={{color: '#198ecf', fontWeight: '700'}}> Login</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{paddingHorizontal: 10}}>
-          <Text
-            style={{
-              fontFamily: 'Roboto-MediumItalic',
-              fontSize: 28,
-              fontWeight: '500',
-              color: '#333',
-              marginBottom: 30,
-              alignSelf: 'center',
-            }}>
-            Fresh Garden Always
-          </Text>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 30,
-              width: '100%',
-            }}>
-            <View style={styles.txtView}>
-              <Text style={styles.txt}>Save Time</Text>
-              <Text style={styles.txt}>
-                Perfectly fitting Custom designer wear online
-              </Text>
-            </View>
-            <View style={styles.imgView}>
-              <Image
-                style={styles.img}
-                source={require('../assets/images/registration.png')}
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              borderWidth: 2,
-              marginBottom: 20,
-              borderRadius: 10,
-              borderColor: '#D3D3D3',
-            }}>
-            <View style={styles.mainView}>
-              <View style={{width: '40%'}}>
-                <Text style={styles.txtName}>Otp</Text>
-              </View>
-              <View style={{width: '60%'}}>
+              <View
+                style={{
+                  width: '80%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 <OTPInputView
-                  style={{width: '95%', height: 50}}
+                  style={{width: '70%', height: 50}}
                   onCodeChanged={setCode}
                   pinCount={4}
                   autoFocusOnLoad
@@ -283,55 +209,104 @@ const RegisterScreen = ({navigation}) => {
                     console.log(`Code is ${code}, you are good to go!`);
                   }}
                 />
+                
+                {OtpRecived?(<TouchableOpacity
+                  style={{
+                    backgroundColor: '#F00976',
+                    padding: 8,
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    marginHorizontal: 10,
+                  }}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontWeight: '700',
+                      fontSize: 16,
+                      color: '#fff',
+                    }}>
+                    Wait Otp
+                  </Text>
+                </TouchableOpacity>
+                ):(
+                  <TouchableOpacity
+                  onPress={sendMobile}
+                  style={{
+                    backgroundColor: '#F00976',
+                    padding: 8,
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    marginHorizontal: 10,
+                  }}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontWeight: '700',
+                      fontSize: 16,
+                      color: '#fff',
+                    }}>
+                    Get Otp
+                  </Text>
+                </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>
-          <TouchableOpacity
-            onPress={verifyOtp}
+        </View>
+        <TouchableOpacity
+          onPress={verifyOtp}
+          style={{
+            backgroundColor: '#F00976',
+            padding: 20,
+            borderRadius: 10,
+            marginBottom: 10,
+            width: 200,
+            alignSelf: 'center',
+          }}>
+          <Text
             style={{
-              backgroundColor: '#198ecf',
-              padding: 20,
-              borderRadius: 10,
-              marginBottom: 10,
-              width: 200,
-              alignSelf: 'center',
+              textAlign: 'center',
+              fontWeight: '700',
+              fontSize: 16,
+              color: '#fff',
             }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontWeight: '700',
-                fontSize: 16,
-                color: '#fff',
-              }}>
-              SUBMIT
-            </Text>
-          </TouchableOpacity>
+            Register
+          </Text>
+        </TouchableOpacity>
 
-          <View
-            style={{
-              justifyContent: 'center',
-              marginBottom: 10,
-              alignSelf: 'center',
-            }}>
-            <Text style={{color: '#333', fontWeight: '500'}}>
-              Registration is Free
-            </Text>
+        <View
+          style={{
+            justifyContent: 'center',
+            marginBottom: 10,
+            alignSelf: 'center',
+          }}>
+          <Text style={{color: '#333', fontWeight: '500', textAlign: 'center'}}>
+          Registration is FREE
+          </Text>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginBottom: 10,
-            }}>
-            <Text style={{color: '#333', fontWeight: '500'}}>
-              To see our latest Design
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={{color: '#198ecf', fontWeight: '700'}}> Login</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      )}
+        <View
+          style={{
+            justifyContent: 'center',
+            marginBottom: 10,
+            alignSelf: 'center',
+          }}>
+          <Text style={{color: '#333', fontWeight: '500', textAlign: 'center'}}>
+          Register now to see our latest designer wear collection
+          </Text>
+        </View>
+        <View
+          style={{
+            justifyContent: 'center',
+            marginBottom: 10,
+            alignSelf: 'center',
+          }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text>Login</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -372,7 +347,7 @@ const styles = StyleSheet.create({
     width: '95%',
     borderRadius: 10,
     height: 50,
-    borderColor: '#D3D3D3',
+    borderColor: '#F00976',
   },
   secondTop: {
     flexDirection: 'row',
@@ -386,7 +361,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: 40,
     height: 45,
-    borderColor: '#D3D3D3',
+    borderColor: '#F00976',
     borderRadius: 5,
   },
   borderStyleBase: {
@@ -395,7 +370,7 @@ const styles = StyleSheet.create({
   },
 
   borderStyleHighLighted: {
-    borderColor: '#D3D3D3',
+    borderColor: '#F00976',
   },
 
   underlineStyleBase: {
@@ -404,12 +379,13 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderWidth: 2,
     borderRadius: 5,
-    color: '#333',
+    color: '#F00976',
     fontFamily: 'Roboto-Medium',
+    borderColor: '#F00976',
   },
 
   underlineStyleHighLighted: {
-    color: '#333',
+    color: '#F00976',
   },
 });
 export default RegisterScreen;

@@ -62,7 +62,7 @@ const TabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="TabOrderStatus"
         component={TabOrderStatus}
         options={{
@@ -72,8 +72,8 @@ const TabNavigator = () => {
             <Feather name="shopping-bag" color={color} size={size} />
           ),
         }}
-      />
-      {/* <Tab.Screen
+      /> */}
+      <Tab.Screen
         name="OrderStatus"
         component={OrderStatus}
         options={{
@@ -83,7 +83,7 @@ const TabNavigator = () => {
             <Feather name="shopping-bag" color={color} size={size} />
           ),
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };

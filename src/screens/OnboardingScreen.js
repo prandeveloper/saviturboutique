@@ -4,8 +4,18 @@ import {SafeAreaView, View, Text, TouchableOpacity, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Gaming from '../assets/images/misc/gaming.svg';
 import BrandLogo from '../assets/images/misc/brandLogo.svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OnboardingScreen = ({navigation}) => {
+  setTimeout(async () => {
+    const value = await AsyncStorage.getItem('user_id');
+    if (value !== null) {
+      navigation.replace('Home');
+    } else {
+      navigation.replace('Register');
+      //navigation.replace('Login', { name: 'Login' }) 
+    }
+  }, 1000);
   return (
     <SafeAreaView
       style={{
@@ -46,7 +56,7 @@ const OnboardingScreen = ({navigation}) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}
-        onPress={() => navigation.navigate('Login')}>
+        >
         <Text
           style={{
             color: 'white',

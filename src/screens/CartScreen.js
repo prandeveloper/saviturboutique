@@ -162,7 +162,7 @@ const CartScreen = ({ navigation }) => {
       if (!userName.length >= 1) {
         if (quote.length >= 1) {
           AddQuote()
-          navigation.navigate('OrderStatus');
+          navigation.navigate('TabOrderStatus');
         } else {
           navigation.navigate('CartScreen');
 

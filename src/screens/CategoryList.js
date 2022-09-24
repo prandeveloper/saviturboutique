@@ -234,11 +234,9 @@ const CategoryList = ({route, navigation}) => {
 
               <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                  marginBottom: 6,
+                  flexDirection: 'row', justifyContent: 'space-around', marginBottom: 6 
                 }}>
-                {/* <TouchableOpacity
+                <TouchableOpacity
                             style={styles.view}
                             onPress={() =>
                               navigation.navigate('CarouselScreen', {
@@ -246,7 +244,7 @@ const CategoryList = ({route, navigation}) => {
                               })
                             }>
                             <Text style={{color: 'white'}}>View</Text>
-                          </TouchableOpacity> */}
+                          </TouchableOpacity>
                 <Modal
                   animationType="slide"
                   transparent={true}
@@ -535,12 +533,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   view: {
-    backgroundColor: '#fff',
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', width: 50, height: 30, justifyContent: 'center', alignItems: 'center', borderRadius: 10,
   },
   heding: {
     fontSize: 20,

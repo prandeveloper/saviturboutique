@@ -142,14 +142,10 @@ const [notificationcount, setNotificationcount] = useState([]);
         </View>
 
         {gamesTab == 1 &&
-          freeGames.map(item => (
-            <OrderStatus />
-          ))}
+            <OrderStatus />}
         {gamesTab == 2 &&
-          paidGames.map(item => (
-            
             <QuoteInvoiceList />
-          ))}
+            }
       </ScrollView>
     </SafeAreaView>
   );
