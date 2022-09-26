@@ -888,6 +888,7 @@ const CartScreen = ({ navigation }) => {
                   }}>
                   <View style={[styles.centeredView, modalBackgroundStyle]}>
                     <View style={styles.modalView}>
+                    <Text style={{alignSelf:'flex-start',marginBottom:10,color:'#333',fontSize:15,fontWeight:'800'}} >Discounted Bill</Text>
                       <View style={styles.disc}>
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Product charges:{invoice.product_charge}
@@ -895,9 +896,9 @@ const CartScreen = ({ navigation }) => {
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Unbilled product charges:NA
                         </Text>
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                        {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Pick up courier charges:Rs{invoice.re_charge}
-                        </Text>
+                        </Text> */}
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs{invoice.co_charge}
                         </Text>

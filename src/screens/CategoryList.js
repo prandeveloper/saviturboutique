@@ -209,11 +209,19 @@ const CategoryList = ({route, navigation}) => {
                       )
                       .then(response => {
                         console.log(response.data);
-                        if (response.data.status === true) {
-                          handleOnpress(element);
-                        } else {
-                          console.log('no item!');
-                        }
+                        const newItems = response.data.data.map(val => {
+                          if (val.id === item.id) {
+                            return {...val, selected: !val.selected};
+                          } else {
+                            return val;
+                          }
+                        });
+                        
+                        // if (response.data.status === true) {
+                        //   handleOnpress(element);
+                        // } else {
+                        //   console.log('no item!');
+                        // }
                       })
                       .catch(error => {
                         console.log(error);
@@ -226,7 +234,7 @@ const CategoryList = ({route, navigation}) => {
                     style={{
                       width: 20,
                       height: 20,
-                      tintColor: item.selected ? '#d5267a' : '#d5267a',
+                      tintColor: item.selected ? '#d5267a' : '#fff',
                       marginRight: 5,
                       marginTop: 5,
                     }}
@@ -260,21 +268,17 @@ const CategoryList = ({route, navigation}) => {
                       <View
                         style={{
                           flexDirection: 'row',
-                          width: 250,
-                          justifyContent: 'space-between',
                         }}>
                         <View
                           style={{
-                            borderWidth: 2,
-                            marginRight: 10,
                             borderRadius: 20,
-                            borderColor: '#F00976',
                           }}>
                           <Image
                             style={{
                               width: 100,
                               height: 100,
                               borderRadius: 20,
+                              marginRight:40
                             }}
                             source={{uri: `${modelData?.image}`}}
                           />
@@ -338,6 +342,8 @@ const CategoryList = ({route, navigation}) => {
                           />
                         </View>
                       </View>
+                <Text style={{color: '#333',alignSelf:'flex-start',marginLeft:20,marginBottom:8}}>Instructions to tailor</Text>
+
                       <View
                         style={{
                           flexDirection: 'row',
