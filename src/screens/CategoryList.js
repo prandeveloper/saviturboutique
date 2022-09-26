@@ -212,7 +212,7 @@ const CategoryList = ({route, navigation}) => {
                         if (response.data.status === true) {
                           handleOnpress(element);
                         } else {
-                          console.log('no id!');
+                          console.log('no item!');
                         }
                       })
                       .catch(error => {
