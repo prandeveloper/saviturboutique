@@ -193,7 +193,7 @@ const CategoryList = ({route, navigation}) => {
             style={[styles.exerciseImage, { borderRadius: 10}]}>
             <View style={{flex: 1, borderRadius: 10}}>
               <View style={{flex: 1, alignSelf: 'flex-end'}}>
-                <TouchableOpacity
+                <TouchableOpacity style={{}}
                   onPress={async () =>
                     axios
                       .post(
@@ -219,12 +219,14 @@ const CategoryList = ({route, navigation}) => {
                         console.log(error);
                       })
                   }>
+                    
                   <Image
+                  
                     source={require('../assets/images/love.png')}
                     style={{
                       width: 20,
                       height: 20,
-                      tintColor: item.selected ? '#d5267a' : '#fff',
+                      tintColor: item.selected ? '#d5267a' : '#d5267a',
                       marginRight: 5,
                       marginTop: 5,
                     }}

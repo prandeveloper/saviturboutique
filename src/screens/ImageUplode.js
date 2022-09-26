@@ -433,6 +433,7 @@ const ImageUplode = ({navigation}) => {
                     />
                   </View>
                 </View>
+                <Text style={{color: '#333',marginTop:8}}>The quotation will be updated by next working day </Text>
               </View>
             </View>
           </View>
@@ -536,6 +537,7 @@ export default ImageUplode;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'#fff'
   },
   commandButton: {
     padding: 15,
