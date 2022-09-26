@@ -370,7 +370,7 @@ const CartScreen = ({ navigation }) => {
       image: 'https://i.imgur.com/3g7nmJC.png',
       currency: 'INR',
       key: 'rzp_test_7jsSm3AZI9fhex', // Your api key
-      amount: invoice.total_amount * 100,
+      amount: invoice.after_discount * 100,
       name: 'foo',
       prefill: {
         email: 'void@razorpay.com',

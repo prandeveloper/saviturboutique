@@ -650,26 +650,34 @@ const OrderList = ({route, navigation}) => {
                   </View>
                 </View>
               </View>
-              <View style={styles.disc}>
+              {/* <View style={styles.disc}>
                 <Text style={styles.pickTxt}>
                   Approximate delivery date 7 days (2 days pickup + 3 days
                   process + 2 days delivery by courier )
                 </Text>
-              </View>
-              <Text style={styles.heding}>invoice</Text>
+              </View> */}
+              <Text style={styles.heding}>Discounted Bill</Text>
 
               <View style={styles.disc}>
                 <View>
                   <Text style={[styles.pickTxt, {marginBottom: 10}]}>
                     Product charges:{userId.product_charge}
                   </Text>
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                          Delivery courier charges:Rs 49
+                        </Text>
                   <Text style={[styles.pickTxt, {marginBottom: 10}]}>
-                    Courier charges:{userId.co_charge}
+                  Pick up courier charges:{userId.co_charge}
                   </Text>
                   <Text style={[styles.pickTxt, {marginBottom: 10}]}>
-                    Total charges:{userId.after_discount}/-
+                    Total charges:{userId.total_amount}/-
                   </Text>
-                  {/* <Text style={styles.pickTxt}>Get 10% Discount Pay just Rs 500 only valid till 29-july-2022</Text> */}
+                  <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                  Discount:{userId.discount}/-
+                  </Text>
+                  <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                  Final charges after discount: Rs{userId.after_discount}/-
+                  </Text>
                 </View>
                 <View>
                   {userId.status == 6 && true ? (
