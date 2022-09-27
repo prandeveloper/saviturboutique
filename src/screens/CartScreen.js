@@ -19,6 +19,7 @@ import { RadioButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './HomeScreen';
 import RazorpayCheckout from 'react-native-razorpay';
+import CountDown from 'react-native-countdown-component';
 
 const CartScreen = ({ navigation }) => {
   const [pickup_r, setPickup_r] = useState(false);
@@ -866,7 +867,7 @@ const CartScreen = ({ navigation }) => {
             <Text style={{fontSize:20,fontWeight:'700',color:'black',marginBottom:10}}>Delivery Date</Text>
             <View style={styles.disc}>
               <Text style={styles.pickTxt}>
-                If you order with in 11 Hr:29 minutes, best change to delivered by{invoice.expire_date} before 7:00
+                If you order with in 11 Hr:29 minutes, best change to delivered by {invoice.expire_date} before {invoice.expire_date}
               </Text>
             </View>
             <View>
@@ -899,9 +900,9 @@ const CartScreen = ({ navigation }) => {
                         {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Pick up courier charges:Rs{invoice.re_charge}
                         </Text> */}
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                        {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs{invoice.co_charge}
-                        </Text>
+                        </Text> */}
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Total charges:{invoice.total_amount}/-
                         </Text>
@@ -923,9 +924,9 @@ const CartScreen = ({ navigation }) => {
                             borderColor: '#F00976',
                           }}>
                           <View style={{ padding: 5 }}>
-                            <Text style={[styles.pickTxt]}>
+                            {/* <Text style={[styles.pickTxt]}>
                               Applied 10% DISCOUNT
-                            </Text>
+                            </Text> */}
                             <Text style={[styles.pickTxt]}>
                               Rs {invoice.discount}/- OFF
                             </Text>

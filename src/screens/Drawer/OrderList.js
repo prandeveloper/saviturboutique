@@ -663,12 +663,12 @@ const OrderList = ({route, navigation}) => {
                   <Text style={[styles.pickTxt, {marginBottom: 10}]}>
                     Product charges:{userId.product_charge}
                   </Text>
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                        {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs 49
-                        </Text>
-                  <Text style={[styles.pickTxt, {marginBottom: 10}]}>
+                        </Text> */}
+                  {/* <Text style={[styles.pickTxt, {marginBottom: 10}]}>
                   Pick up courier charges:{userId.co_charge}
-                  </Text>
+                  </Text> */}
                   <Text style={[styles.pickTxt, {marginBottom: 10}]}>
                     Total charges:{userId.total_amount}/-
                   </Text>

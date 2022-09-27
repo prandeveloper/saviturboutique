@@ -61,7 +61,7 @@ const QuoteOrderList = ({ route, navigation }) => {
   const [counter, setCounter] = useState('');
   const [succes, unSucces] = useState('');
   const [PaymentId, setPaymentId] = useState('');
-  
+
 
 
 
@@ -159,7 +159,7 @@ const QuoteOrderList = ({ route, navigation }) => {
         `http://saviturboutique.com/newadmin/api/ApiCommonController/quotetotalpriceget/${order_id}`,
       )
       .then(response => {
-        console.log("<<<<<aaaaaaaaaaaaa",response.data.data)
+        console.log("<<<<<aaaaaaaaaaaaa", response.data.data)
         const invoice = response.data.data;
         setInvoice(invoice);
         console.log('/</</ test invoice', invoice);
@@ -197,7 +197,7 @@ const QuoteOrderList = ({ route, navigation }) => {
 
 
   const Order = async id => {
-    console.log("<><?<>?><?><>>",PaymentId,userId.amount,userId);
+    console.log("<><?<>?><?><>>", PaymentId, userId.amount, userId);
     await axios
       .post(
         `http://saviturboutique.com/newadmin/api/ApiCommonController/efgh`,
@@ -227,7 +227,7 @@ const QuoteOrderList = ({ route, navigation }) => {
       image: 'https://i.imgur.com/3g7nmJC.png',
       currency: 'INR',
       key: 'rzp_test_7jsSm3AZI9fhex', // Your api key
-      amount: userId.total_amount * 100,
+      amount: userId.total_discount * 100,
       name: 'foo',
       prefill: {
         email: 'void@razorpay.com',
@@ -659,7 +659,7 @@ const QuoteOrderList = ({ route, navigation }) => {
                       <View></View>
                     ) : (
                       <View>
-                        <CheckBox
+                        {/* <CheckBox
                           checkedColor="#15d03e"
                           uncheckedColor="#15d03e"
                           containerStyle={{
@@ -672,7 +672,7 @@ const QuoteOrderList = ({ route, navigation }) => {
                           value={delivery_same}
                           onChangeText={setDelivery_same}
                           onPress={() => setDelivery_same(!delivery_same)}
-                        />
+                        /> */}
 
                         <View
                           style={{
@@ -732,139 +732,146 @@ const QuoteOrderList = ({ route, navigation }) => {
                 </Text>
               </View> */}
               <Text style={styles.heding}>Discounted Bill</Text>
-                {invoice.pay_status == 1 && true ?(
+              {invoice.pay_status == 1 && true ? (
                 <View style={styles.disc1}>
-                <View>
-                <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                          Product charges:{userId.amount}
-                        </Text>
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                          Unbilled product charges:{invoice.pay_status == 0 && true ?(<Text>Pending Quote</Text>):(<Text>NA</Text>
-                          )}
-                        </Text>
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                  <View>
+                    <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                      Product charges:{userId.amount}
+                    </Text>
+                    <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                      Unbilled product charges:{invoice.pay_status == 0 && true ? (<Text>Pending Quote</Text>) : (<Text>NA</Text>
+                      )}
+                    </Text>
+                    {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Pick up courier charges:Rs 49
                         </Text>
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs 49
-                        </Text>
-                        {userId ? (
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                              Total charges :{userId.total_amount}/-
-                        </Text>
-                        )
-                        :
-                        (
+                        </Text> */}
+                    {userId ? (
+                      <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                        Total charges :{userId.total_amount}/-
+                      </Text>
+                    )
+                      :
+                      (
                         <View>
                           <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                              Total charges : To be calculated
-                        </Text>
+                            Total charges : To be calculated
+                          </Text>
                         </View>
-                        )
-                        }
-                        <Text
-                          style={[
-                            styles.pickTxt,
-                            { marginBottom: 10, fontWeight: '800', textAlign: 'center', },
-                          ]}>
-                          Final charges after discount : {userId ?(<Text>{userId.total_amount}</Text>):(<Text>Pending Quote</Text>)}
-                        </Text>
-                  {/* <Text style={styles.pickTxt}>Get 10% Discount Pay just Rs 500 only valid till 29-july-2022</Text> */}
+                      )
+                    }
+                    <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                      Discount Applied:{userId.discount ? (<Text>{userId.discount}</Text>) : (<Text>Pending discount</Text>)}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.pickTxt,
+                        { marginBottom: 10, fontWeight: '800', textAlign: 'center', },
+                      ]}>
+                      Final charges after discount : {userId ? (<Text>{userId.total_discount}</Text>) : (<Text>Pending Quote</Text>)}
+                    </Text>
+                    {/* <Text style={styles.pickTxt}>Get 10% Discount Pay just Rs 500 only valid till 29-july-2022</Text> */}
+                  </View>
+                  <View>
+                    {userId.status == 6 && true ? (
+                      <View>
+                        <Image
+                          style={styles.paid}
+                          source={require('../../assets/images/Delivereds.png')}
+                        />
+                      </View>
+                    ) : (
+                      <View>
+                        {invoice.pay_status == 1 && true ? (
+                          <Image
+                            style={styles.paid}
+                            source={require('../../assets/images/paids.png')}
+                          />
+                        ) : (
+                          <Image
+                            style={styles.paid}
+                            source={require('../../assets/images/quotetoreday.png')}
+                          />
+                        )}
+                      </View>
+                    )}
+                  </View>
                 </View>
-                <View>
-                  {userId.status == 6 && true ? (
-                    <View>
-                      <Image
-                        style={styles.paid}
-                        source={require('../../assets/images/delivered.png')}
-                      />
-                    </View>
-                  ) : (
-                    <View>
-                      {invoice.pay_status == 1 && true ? (
-                        <Image
-                          style={styles.paid}
-                          source={require('../../assets/images/paid.png')}
-                        />
-                      ) : (
-                        <Image
-                          style={styles.paid}
-                          source={require('../../assets/images/unpaid.png')}
-                        />
+              ) : (
+                <View style={[styles.disc1, { width: '100%' }]}>
+                  <View>
+                    <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                      Product charges:{userId.amount}
+                    </Text>
+                    <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                      Unbilled product charges:{invoice.pay_status == 0 && true ? (<Text>Pending Quote</Text>) : (<Text>NA</Text>
                       )}
-                    </View>
-                  )}
-                </View>
-              </View>
-              ):(
-                <View style={[styles.disc1,{width:'100%'}]}>
-                <View>
-                <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                          Product charges:{userId.amount}
-                        </Text>
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                          Unbilled product charges:{invoice.pay_status == 0 && true ?(<Text>Pending Quote</Text>):(<Text>NA</Text>
-                          )}
-                        </Text>
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                    </Text>
+
+                    {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Pick up courier charges:Rs 49
                         </Text>
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs 49
-                        </Text>
-                        {userId ? (
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                              Total charges :{userId.total_amount}/-
-                        </Text>
-                        )
-                        :
-                        (
+                        </Text> */}
+                    {userId.total_amount == !null ? (
+                      <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                        Total charges :{userId.total_amount}/-
+                      </Text>
+                    )
+                      :
+                      (
                         <View>
                           <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                              Total charges : To be calculated
-                        </Text>
+                            Total charges : To be calculated
+                          </Text>
                         </View>
-                        )
-                        }
-                        <Text
-                          style={[
-                            styles.pickTxt,
-                            { marginBottom: 10, fontWeight: '800', textAlign: 'center', },
-                          ]}>
-                          Final charges : {userId.total_amount ==!null ?(<Text>{userId.total_amount}</Text>):(<Text>Pending Quote</Text>)}
-                        </Text>
-                  <Text style={[
-                            styles.pickTxt,
-                            { marginBottom: 10, fontWeight: '800', textAlign: 'center',marginLeft:15 },
-                          ]}>if urgent, contact on WhatsApp +919886758183</Text>
-                </View>
-                <View>
-                  {userId.status == 6 && true ? (
-                    <View>
-                      <Image
-                        style={styles.paid}
-                        source={require('../../assets/images/delivered.png')}
-                      />
-                    </View>
-                  ) : (
-                    <View>
-                      {invoice.pay_status == 1 && true ? (
+                      )
+                    }
+                    <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                      Discount Applied:{userId.discount ? (<Text>{userId.discount}</Text>) : (<Text>Pending discount</Text>)}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.pickTxt,
+                        { marginBottom: 10, fontWeight: '800', textAlign: 'center', },
+                      ]}>
+                      Final charges : {userId.total_discount ? (<Text>{userId.total_discount}</Text>) : (<Text>Pending Quote</Text>)}
+                    </Text>
+                    <Text style={[
+                      styles.pickTxt,
+                      { marginBottom: 10, fontWeight: '800', textAlign: 'center', marginLeft: 15 },
+                    ]}>if urgent, contact on WhatsApp +919886758183</Text>
+                  </View>
+                  <View>
+                    {userId.status == 6 && true ? (
+                      <View>
                         <Image
                           style={styles.paid}
-                          source={require('../../assets/images/paid.png')}
+                          source={require('../../assets/images/Delivereds.png')}
                         />
-                      ) : (
-                        <Image
-                          style={[styles.paid]}
-                          source={require('../../assets/images/unpaid.png')}
-                        />
-                      )}
-                    </View>
-                  )}
+                      </View>
+                    ) : (
+                      <View>
+                        {invoice.pay_status == 1 && true ? (
+                          <Image
+                            style={styles.paid}
+                            source={require('../../assets/images/paids.png')}
+                          />
+                        ) : (
+                          <Image
+                            style={[styles.paid]}
+                            source={require('../../assets/images/quotetoreday.png')}
+                          />
+                        )}
+                      </View>
+                    )}
+                  </View>
                 </View>
-              </View>
               )}
-              
+
               <View style={styles.centeredView}>
                 <Modal
                   animationType="slide"
@@ -883,32 +890,32 @@ const QuoteOrderList = ({ route, navigation }) => {
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Unbilled product charges:NA
                         </Text>
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                        {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Pick up courier charges:Rs 49
                         </Text>
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs 49
-                        </Text>
+                        </Text> */}
                         {userId ? (
-                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                              Total charges :{userId.total_amount}/-
-                        </Text>
-                        )
-                        :
-                        (
-                        <View>
                           <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                              Total charges : To be calculated
-                        </Text>
-                        </View>
+                            Total charges :{userId.total_amount}/-
+                          </Text>
                         )
+                          :
+                          (
+                            <View>
+                              <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                                Total charges : To be calculated
+                              </Text>
+                            </View>
+                          )
                         }
                         <Text
                           style={[
                             styles.pickTxt,
                             { marginBottom: 10, fontWeight: '800', textAlign: 'center' },
                           ]}>
-                          Final charges : {userId?(<Text>{userId.total_amount}</Text>):(<Text>Pending Quote</Text>)}
+                          Final charges : {userId ? (<Text>{userId.total_discount}</Text>) : (<Text>Pending Quote</Text>)}
                         </Text>
                       </View>
                       <View
@@ -929,27 +936,36 @@ const QuoteOrderList = ({ route, navigation }) => {
                     </View>
                   </View>
                 </Modal>
-                {userId.amount == 0 ?(
-                  <TouchableOpacity style={styles.btn}>
-                  <Text style={{
-                    textAlign: 'center',
-                    fontWeight: '400',
-                    color: '#fff',
-                  }}>Place wait Quote price updated by 24 hours</Text>
-                </TouchableOpacity>
-                )
+                {invoice.pay_status == 1 && true ?
+                (<View></View>)
                 :
                 (
-                  <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(true)} >
-                  <Text style={{
-                    textAlign: 'center',
-                    fontWeight: '700',
-                    fontSize: 16,
-                    color: '#fff',
-                  }}>Continue</Text>
-                </TouchableOpacity>
+                  <View>
+                {userId.amount == 0 ? (
+                  <TouchableOpacity style={styles.btn}>
+                    <Text style={{
+                      textAlign: 'center',
+                      fontWeight: '400',
+                      color: '#fff',
+                    }}>Place wait Quote price updated by 24 hours</Text>
+                  </TouchableOpacity>
                 )
-}
+                  :
+                  (
+                    <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(true)} >
+                      <Text style={{
+                        textAlign: 'center',
+                        fontWeight: '700',
+                        fontSize: 16,
+                        color: '#fff',
+                      }}>Continue</Text>
+                    </TouchableOpacity>
+                  )
+                }
+                </View>
+                )
+                }
+                
               </View>
             </View>
           </View>
