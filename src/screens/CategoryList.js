@@ -169,7 +169,7 @@ const CategoryList = ({route, navigation}) => {
   //       console.log(error);
   //     });
   // };
-  const handleOnpress = element => {
+  const handleOnpress = () => {
     const newItem = plant.map(val => {
       if (val.id === item.id) {
         return {...val, selected: !val.selected};
@@ -209,24 +209,17 @@ const CategoryList = ({route, navigation}) => {
                       )
                       .then(response => {
                         console.log(response.data);
-                        const newItems = response.data.data.map(val => {
-                          if (val.id === item.id) {
-                            return {...val, selected: !val.selected};
-                          } else {
-                            return val;
-                          }
-                        });
-                        
-                        // if (response.data.status === true) {
-                        //   handleOnpress(element);
-                        // } else {
-                        //   console.log('no item!');
-                        // }
+                        if (response.data.status === true) {
+                          handleOnpress();
+                        } else {
+                          console.log('no item!');
+                        }
                       })
                       .catch(error => {
                         console.log(error);
                       })
                   }>
+                    
                     
                   <Image
                   
@@ -234,7 +227,7 @@ const CategoryList = ({route, navigation}) => {
                     style={{
                       width: 20,
                       height: 20,
-                      tintColor: item.selected ? '#d5267a' : '#fff',
+                      tintColor: item.selected ? '#d5267a' : '#d5267a',
                       marginRight: 5,
                       marginTop: 5,
                     }}
