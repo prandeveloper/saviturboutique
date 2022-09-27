@@ -278,7 +278,13 @@ const CustomDrawer = props => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingVertical: 15}}>
+          <TouchableOpacity style={{paddingVertical: 15}}
+          onPress={() =>
+            Linking.openURL(
+              'https://goo.gl/maps/zmTcsbHEsoKLTVsZ7',
+            )
+          }
+          >
             <View
               style={{
                 flexDirection: 'row',
@@ -298,7 +304,11 @@ const CustomDrawer = props => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingVertical: 15}}>
+          <TouchableOpacity style={{paddingVertical: 15}} onPress={() =>
+            Linking.openURL(
+              'https://api.whatsapp.com/send/?phone=%2B919886758183&text=%22Hello%22',
+            )
+          }>
             <View
               style={{
                 flexDirection: 'row',

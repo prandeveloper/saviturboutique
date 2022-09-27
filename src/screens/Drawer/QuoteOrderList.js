@@ -750,7 +750,7 @@ const QuoteOrderList = ({ route, navigation }) => {
                         </Text> */}
                     {userId ? (
                       <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                        Total charges :{userId.total_amount}/-
+                        Total charges :{userId.total_amount}
                       </Text>
                     )
                       :
@@ -816,9 +816,9 @@ const QuoteOrderList = ({ route, navigation }) => {
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Delivery courier charges:Rs 49
                         </Text> */}
-                    {userId.total_amount == !null ? (
+                    {userId  ? (
                       <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                        Total charges :{userId.total_amount}/-
+                        Total charges :{userId.total_amount}
                       </Text>
                     )
                       :
@@ -863,7 +863,7 @@ const QuoteOrderList = ({ route, navigation }) => {
                         ) : (
                           <Image
                             style={[styles.paid]}
-                            source={require('../../assets/images/quotetoreday.png')}
+                            source={require('../../assets/images/pending.png')}
                           />
                         )}
                       </View>
@@ -888,8 +888,9 @@ const QuoteOrderList = ({ route, navigation }) => {
                           Product charges:{userId.amount}
                         </Text>
                         <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                          Unbilled product charges:NA
-                        </Text>
+                      Unbilled product charges:{invoice.pay_status == 0 && true ? (<Text>Pending Quote</Text>) : (<Text>NA</Text>
+                      )}
+                    </Text>
                         {/* <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
                           Pick up courier charges:Rs 49
                         </Text>
@@ -897,9 +898,7 @@ const QuoteOrderList = ({ route, navigation }) => {
                           Delivery courier charges:Rs 49
                         </Text> */}
                         {userId ? (
-                          <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
-                            Total charges :{userId.total_amount}/-
-                          </Text>
+                          <Text style={[styles.pickTxt, { marginBottom: 10 }]}> Total charges :{userId.total_amount}/- </Text>
                         )
                           :
                           (
@@ -910,6 +909,9 @@ const QuoteOrderList = ({ route, navigation }) => {
                             </View>
                           )
                         }
+                        <Text style={[styles.pickTxt, { marginBottom: 10 }]}>
+                      Discount Applied:{userId.discount ? (<Text>{userId.discount}</Text>) : (<Text>Pending discount</Text>)}
+                    </Text>
                         <Text
                           style={[
                             styles.pickTxt,

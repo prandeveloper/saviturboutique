@@ -684,7 +684,7 @@ const OrderList = ({route, navigation}) => {
                     <View>
                       <Image
                         style={styles.paid}
-                        source={require('../../assets/images/delivered.png')}
+                        source={require('../../assets/images/Delivereds.png')}
                       />
                     </View>
                   ) : (
@@ -692,12 +692,12 @@ const OrderList = ({route, navigation}) => {
                       {invoice.pay_status == 1 && true ? (
                         <Image
                           style={styles.paid}
-                          source={require('../../assets/images/paid.png')}
+                          source={require('../../assets/images/paids.png')}
                         />
                       ) : (
                         <Image
                           style={styles.paid}
-                          source={require('../../assets/images/unpaid.png')}
+                          source={require('../../assets/images/pending.png')}
                         />
                       )}
                     </View>

@@ -169,7 +169,7 @@ const CartScreen = ({navigation}) => {
       if (!userName.length >= 1) {
         if (quote.length >= 1) {
           AddQuote();
-          navigation.navigate('TabOrderStatus');
+          navigation.navigate('OrderStatus');
         } else {
           navigation.navigate('CartScreen');
         }
@@ -799,7 +799,7 @@ const CartScreen = ({navigation}) => {
                     <View></View>
                   ) : (
                     <View>
-                      <CheckBox
+                      {/* <CheckBox
                         checkedColor="#15d03e"
                         uncheckedColor="#15d03e"
                         containerStyle={{
@@ -812,7 +812,7 @@ const CartScreen = ({navigation}) => {
                         value={delivery_same}
                         onChangeText={setDelivery_same}
                         onPress={() => setDelivery_same(!delivery_same)}
-                      />
+                      /> */}
 
                       <View
                         style={{
@@ -874,8 +874,8 @@ const CartScreen = ({navigation}) => {
             </Text>
             <View style={styles.disc}>
               <Text style={styles.pickTxt}>
-                If you order with in 11 Hr:29 minutes, best change to delivered
-                by {invoice.expire_date} before {invoice.expire_date}
+                If you order with in 11 Hr:29 minutes, best chance to delivered
+                by {invoice.expire_date} before 7 PM
               </Text>
             </View>
             <View>
@@ -909,7 +909,7 @@ const CartScreen = ({navigation}) => {
                       </Text>
                       <View style={styles.disc}>
                         <Text style={[styles.pickTxt, {marginBottom: 10}]}>
-                          Product charges:{invoice.product_charge}
+                          Product charges:Rs {invoice.product_charge}
                         </Text>
                         <Text style={[styles.pickTxt, {marginBottom: 10}]}>
                           Unbilled product charges:NA
@@ -921,7 +921,7 @@ const CartScreen = ({navigation}) => {
                           Delivery courier charges:Rs{invoice.co_charge}
                         </Text> */}
                         <Text style={[styles.pickTxt, {marginBottom: 10}]}>
-                          Total charges:{invoice.total_amount}/-
+                          Total charges:Rs {invoice.total_amount}
                         </Text>
                         <Text style={[styles.pickTxt, {marginBottom: 10}]}>
                           Discount Applied:Rs.{invoice.discount}
@@ -936,7 +936,7 @@ const CartScreen = ({navigation}) => {
                             },
                           ]}>
                           Final charges after discount:Rs.
-                          {invoice.after_discount} only
+                          <Text style={{fontWeight:'700',fontSize:15}} >{invoice.after_discount}</Text> only
                         </Text>
                         <View
                           style={{
@@ -945,20 +945,20 @@ const CartScreen = ({navigation}) => {
                             borderColor: '#F00976',
                           }}>
                           <View style={{padding: 5}}>
-                            {/* <Text style={[styles.pickTxt]}>
-                              Applied 10% DISCOUNT
-                            </Text> */}
                             <Text style={[styles.pickTxt]}>
+                              Applied 10% DISCOUNT
+                            </Text>
+                            <Text style={[styles.pickTxt,{fontWeight:'700'}]}>
                               Rs {invoice.discount}/- OFF
                             </Text>
                             <Text style={[styles.pickTxt]}>
-                              Pay within 4 Min:22 second
+                              Pay within 5 Min
                             </Text>
                           </View>
                         </View>
                         <Text style={[styles.pickTxt, {textAlign: 'center'}]}>
                           Best chance to be delivered by{' '}
-                          <Text style={{fontSize: 18}}>
+                          <Text style={{fontSize: 18,fontWeight:'700'}}>
                             {invoice.expire_date}
                           </Text>{' '}
                           before {invoice.expire_time}

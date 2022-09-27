@@ -46,9 +46,31 @@ const ImageUplode = ({navigation}) => {
   const [first, setFirst] = useState('');
   const [second, setSecond] = useState('');
   const [users, setUsers] = useState('');
+  const [notificationcount, setNotificationcount] = useState([]);
+
 
   const [language, setLanguage] = useState([]);
   const [nameId, setNameId] = useState([]);
+
+  const getCount = async () => {
+    axios
+      .get(
+        `http://saviturboutique.com/newadmin/api/ApiCommonController/notificationcount`,
+      )
+      .then(response => {
+        //console.log("<<<<<",response.data.data)
+        const count = response.data;
+        setNotificationcount(count);
+        console.log('//////////', count);
+        setRefreshing(false);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getCount();
+  }, []);
 
   const getDataProfile = async () => {
     try {
@@ -231,10 +253,15 @@ const ImageUplode = ({navigation}) => {
             <Ionicons name="arrow-back" color={'#F00976'} size={30} />
           </TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('NotificationScreen')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('NotificationScreen')}>
+            <View style={{flexDirection: 'row-reverse'}}>
+              <TouchableOpacity style={styles.counterbtn}>
+                <Text style={styles.countertxt}>{notificationcount.data}</Text>
+              </TouchableOpacity>
               <Ionicons name="notifications" color={'#F00976'} size={30} />
-            </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
           </View>
         </View>
         <BottomSheet
@@ -687,5 +714,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: 'blue',
+  },
+  counterbtn: {
+    backgroundColor: 'yellow',
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
   },
 });
